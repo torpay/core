@@ -30,6 +30,6 @@ application = tornado.web.Application(routes, redis=redis, debug=True)
 def run(port=5000):
 	tornado.options.parse_command_line()
 	print 'Starting ark server....'
-	application.listen(port)
+	application.listen(os.environ.get('PORT', 5000))
 	print 'Running on port %s' % port
 	tornado.ioloop.IOLoop.instance().start()
