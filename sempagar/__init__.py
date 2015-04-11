@@ -22,7 +22,7 @@ routes.append((r'/users/login', handlers.UserSession))
 routes.append((r'/users/logout', handlers.UserSession))
 routes.append((r'/users/profile', handlers.UserProfile))
 
-application = tornado.web.Application(routes, mongo=mongo, redis=redis, debug=True)
+application = tornado.web.Application(routes, redis=redis, debug=True)
 
 def run(port=5000):
 	print 'Starting ark server....'
