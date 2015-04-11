@@ -1,7 +1,10 @@
 # -*- coding: utf-8 -*-
+import os.path
+import os
 import tornado.ioloop
 import tornado.web
-import pymongo
+from tornado.options import define, options
+define('port', default=5000, help='run on the given port', type=int)
 import redis
 import utils
 import sdks
@@ -25,6 +28,7 @@ routes.append((r'/users/profile', handlers.UserProfile))
 application = tornado.web.Application(routes, redis=redis, debug=True)
 
 def run(port=5000):
+	tornado.options.parse_command_line()
 	print 'Starting ark server....'
 	application.listen(port)
 	print 'Running on port %s' % port
