@@ -13,10 +13,8 @@ import handlers
 import sys
 sys.dont_write_bytecode = True
 
-
-#redis://redistogo:742b9896c3849731f37ad20b60a49310@cobia.redistogo.com:9608/
-
-redis = redis.StrictRedis(host='cobia.redistogo.com', port='9608', password='742b9896c3849731f37ad20b60a49310', db='redistogo')
+#redis = redis.StrictRedis(host='cobia.redistogo.com', port='9608', password='742b9896c3849731f37ad20b60a49310', db='redistogo')
+redis = redis.StrictRedis()
 
 routes = []
 #users
