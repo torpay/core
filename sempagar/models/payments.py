@@ -33,9 +33,9 @@ class Payment(Model):
 		})
 		if code != 201:
 			return self.render(code, json.loads(response))
-		if not data['phone'].startsWith('+') and not '+55' in data['phone']:
+		if not data['phone'].startswith('+') and not '+55' in data['phone']:
 			data['phone'] = '+55%s' % data['phone']
-		if not user['phone'].startsWith('+') and not '+55' in user['phone']:
+		if not user['phone'].startswith('+') and not '+55' in user['phone']:
 			user['phone'] = '+55%s' % user['phone']
 		channel.twilioservice.send_sms(msg, data['phone'], user['phone'])
 		output = {
