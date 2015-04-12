@@ -18,7 +18,7 @@ class Payment(Model):
 		if not 'phone' in data:
 			return self.render(400, {'error': 'request.phone.not_found'})
 		data['phone'] = unicode(data['phone'])
-		msg = 'Pagamento de valor %s, para confirmar responda com SIM' % unicode(data['value'])
+		msg = 'Pagamento de valor R$ %s, para confirmar responda com SIM.' % unicode(data['value'])
 		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(data['phone'])
 		if consumer_code == 404:
 			return self.render(404, {'error': 'user.not_found'})
@@ -104,7 +104,6 @@ class Payment(Model):
 			print 'error while sending validation email'
 
 		msg = 'Pagamento de %s confirmado.' % unicode(parsed_response['total_value'])
-		print msg
 		channel.twilioservice.send_sms(msg, consumer['phone'], merchant['phone'])
 		return self.render(200, {'status': 'success'})
 	def search(self):

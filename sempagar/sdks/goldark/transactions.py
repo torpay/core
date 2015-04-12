@@ -28,9 +28,6 @@ def get(merchant_id, consumer_id, **kwargs):
 	return request(url=url, method='GET', headers=headers)
 
 def get_one(payment_id):
-	status = kwargs.get('status')
-	if status is None:
-		status = 'pending'
 	url = '%s/invoices/%s' % (config.host, payment_id)
 	headers = {
 		'X-Api-Token': config.api_token
