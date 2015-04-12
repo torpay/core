@@ -7,10 +7,6 @@ sys.dont_write_bytecode = True
 
 class User(Model):
 	def create(self, data):
-		if 'username' in data:
-			if not '+55' in data['username']:
-				data['username'] = '+55%s' % data['username']
-			data['phone'] = data['username']
 		if not 'user_type' in data:
 			data['user_type'] = 'merchant'
 		(response, code, mimetype) = goldark.users.signup(data)
