@@ -37,7 +37,7 @@ def charge_with_token( token, currency, amount, description=None):
 	return payment
 
 def charge_with_card_details(card, currency, amount, description=None):
-	if (amount < 50 or amount > 9999900 ):
+	if (int(amount) < 50 or int(amount) > 9999900 ):
 		raise exceptions.PaymentError('transation amount out of range')
 	if (len(currency) != 3 ):
 		raise exceptions.PaymentError('invalid transation currency')
@@ -50,6 +50,7 @@ def charge_with_card_details(card, currency, amount, description=None):
 		"description" : description,
 		"currency" : currency
 	}
+
 	if description:
 		obj['description'] = description
 
