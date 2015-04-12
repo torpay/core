@@ -80,7 +80,7 @@ class Payment(Model):
 		parsed_response = parsed_response['data'][0]
 		if answer.lower() != 'sim':
 			goldark.transactions.update(parsed_response['id'], {'status': 'error', 'status_message': 'denied'})
-			return self.render(403, {'error': 'permission denied'} )
+			return self.render(403, {'error': 'permission_denied_by_consumer'} )
 		(card_response, card_code, card_mimetype) = goldark.cards.get(consumer['id'])
 		if card_code == 404:
 			return self.render(404, {'error': 'card.not_found'})
@@ -92,8 +92,12 @@ class Payment(Model):
  		currency = parsed_response.get('curreny')
  		if currency is None:
  			currency = 'USD'
- 		description = parsed_response.get('description')
-		payment.simplifyservice.charge_with_card_details(card=card.to_simplify_obj(), currency= currency, amount=parsed_response['total_value'], description=description)
+
+		description = parsed_response.get('description')
+
+		transation = payment.simplifyservice.charge_with_card_details(card=card.to_simplify_obj(), currency= currency, amount=parsed_response['total_value'], description=description)
+		if transation.paymentStatus != 'APPROVED':
+			return self.render(403, {'error': 'card.refused_by_issuer'})
 
 		goldark.transactions.update(parsed_response['id'], {'status': 'approved'})
 		parsed_response['status'] = 'approved'
