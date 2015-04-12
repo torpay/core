@@ -48,23 +48,25 @@ class Payment(Model):
 		
 		card = payment.creditcard.CreditCard(number = card_number, exp_month=card_month, exp_year=card_year, cvc=card_cvc)
 		receipt = payment.simplifyservice.charge_with_card_details(amount = invoice_amount, description = invoice_description , currency = invoice_currency, card=card.to_simplify_obj() )
-		print receipt
+		# print receipt
 		# 4. 
 		status = self.get_status_from_transation(payment.response.process_message(receipt))
 		(status_response, code, mimetype) = goldark.invoices.update_status( invoice_id, status)
 
 		# 5.
+		# print urllib.urlencode(status_response)	
+		
 
-		return self.render(code, json.loads(status_response))
+		return self.render(code, urllib.urlencode(json.loads(status_response ) ), mimetype='application/x-www-form-urlencoded')
 
 	def get_status_from_consumer(self, response ):
 		if response:
-			return { "status": "Approved", "status_message": "Transação aprovada com sucesso" }
+			return { "status": u"Approved", "status_message": u"Transation sucessfully approved" }
 		else:
-			return { "status": "Failed", "status_message": "Transação não foi aprovada pelo consumidor" }
+			return { "status": u"Failed", "status_message": u"Transation not approved by consumer" }
 
 	def get_status_from_transation(self, response):
 		if response:
-			return { "status": "Approved", "status_message": "Transação aprovada com sucesso" }
+			return { "status": u"Approved", "status_message": u"Transation sucessfully approved" }
 		else:
-			return { "status": "Failed", "status_message": "Transação não foi aprovada pela Operadora do Cartão" }
+			return { "status": u"Failed", "status_message": u"Transation not approved by credit card operator"}
