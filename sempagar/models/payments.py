@@ -21,6 +21,7 @@ class Payment(Model):
 		msg = 'Pagamento de valor %s, para confirmar responda com SIM' % unicode(data['value'])
 		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(data['phone'])
 		if consumer_code == 404:
+			print 'a'
 			return self.render(404, {'error': 'user.not_found'})
 		parsed_consumer_response = json.loads(consumer_response)
 		(response, code, mimetype) = goldark.transactions.create({
@@ -32,6 +33,7 @@ class Payment(Model):
 			'total_value': data['value']
 		})
 		if code != 201:
+			print 'b'
 			return self.render(code, json.loads(response))
 		if not data['phone'].startswith('+') and not '+55' in data['phone']:
 			data['phone'] = '+55%s' % data['phone']
