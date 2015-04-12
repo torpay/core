@@ -19,10 +19,8 @@ class Payment(Model):
 			return self.render(400, {'error': 'request.phone.not_found'})
 		data['phone'] = unicode(data['phone'])
 		msg = 'Pagamento de valor %s, para confirmar responda com SIM' % unicode(data['value'])
-		print data['phone']
 		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(data['phone'])
 		if consumer_code == 404:
-			print 'a'
 			return self.render(404, {'error': 'user.not_found'})
 		parsed_consumer_response = json.loads(consumer_response)
 		(response, code, mimetype) = goldark.transactions.create({
@@ -34,7 +32,6 @@ class Payment(Model):
 			'total_value': data['value']
 		})
 		if code != 201:
-			print 'b'
 			return self.render(code, json.loads(response))
 		if not data['phone'].startswith('+') and not '+55' in data['phone']:
 			data['phone'] = '+55%s' % data['phone']
@@ -74,12 +71,8 @@ class Payment(Model):
 			return self.render(404, {'error': 'consumer.not_found'})
 		merchant = json.loads(merchant_response)['data'][0]
 		consumer = json.loads(consumer_response)['data'][0]
-		(response, code, mimetype) = goldark.transactions.get(merchant['id'], consumer['id'], status='pending')
+		(response, code, mimetype) = goldark.transactions.get(consumer['id'], merchant['id'], status='pending')
 		if code == 404:
-			print '---'
-			print merchant['id']
-			print consumer['id']
-			print '---'
 			return self.render(404, {'error': 'transaction.not_found'})
 		if answer.lower() != 'sim':
 			goldark.transactions.update(response['id'], {'status': 'error', 'status_message': 'denied'})
