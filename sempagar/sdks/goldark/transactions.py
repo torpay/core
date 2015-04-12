@@ -48,9 +48,6 @@ def update(payment_id, data):
 	return request(url=url, method='PUT', headers=headers, mimetype='json', data=_data)
 
 def search(user_id):
-	status = kwargs.get('status')
-	if status is None:
-		status = 'pending'
 	url = '%s/invoices?merchant=%s' % (config.host, user_id)
 	headers = {
 		'X-Api-Token': config.api_token
