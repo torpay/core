@@ -18,7 +18,7 @@ class Payment(Model):
 		if not 'phone' in data:
 			return self.render(400, {'error': 'request.phone.not_found'})
 		data['phone'] = unicode(data['phone'])
-		msg = 'Pagamento de valor R$ %s, para confirmar responda com SIM.' % unicode(int(data['value']))/100
+		msg = 'Pagamento de valor R$ %s, para confirmar responda com SIM.' % unicode(int(data['value'])/100)
 		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(data['phone'])
 		if consumer_code == 404:
 			return self.render(404, {'error': 'user.not_found'})
