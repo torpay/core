@@ -81,7 +81,6 @@ class Payment(Model):
 		if answer.lower() != 'sim':
 			goldark.transactions.update(parsed_response['id'], {'status': 'error', 'status_message': 'denied'})
 			return self.render(403, {'error': 'permission denied'} )
-		if parsed_response[]:
 		(card_response, card_code, card_mimetype) = goldark.cards.get(consumer['id'])
 		if card_code == 404:
 			return self.render(404, {'error': 'card.not_found'})
