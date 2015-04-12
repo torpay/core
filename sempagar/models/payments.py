@@ -57,7 +57,7 @@ class Payment(Model):
 		# print urllib.urlencode(status_response)	
 		
 
-		return self.render(code, urllib.urlencode(json.loads(status_response ) ), mimetype='application/x-www-form-urlencoded')
+		return self.render(code, urllib.urlencode(json.loads(status_response ) ), mimetype='text/plain')
 
 	def get_status_from_consumer(self, response ):
 		if response:
