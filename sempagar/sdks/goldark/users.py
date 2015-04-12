@@ -35,7 +35,6 @@ def logout(access_token):
 
 def get(phone_number):
 	url = '%s/users?phone=%s' % (config.host, phone_number.replace('+', '%2B'))
-	print url
 	headers = {
 		'X-Api-Token': config.api_token
 	}

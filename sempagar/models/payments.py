@@ -58,17 +58,19 @@ class Payment(Model):
 		answer = answer[0]
 		phone_from = phone_from[0]
 		phone_to = phone_to[0]
+		print phone_from
+		print phone_to
 		(merchant_response, merchant_code, merchant_mimetype) = goldark.users.get(phone_from)
 		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(phone_to)
 		print phone_to
 		if merchant_code != 200:
+			print 'a'
 			return self.render(404, {'error': 'merchant.not_found'})
 		if consumer_code != 200:
+			print 'b'
 			return self.render(404, {'error': 'consumer.not_found'})
 		merchant = json.loads(merchant_response)['data'][0]
 		consumer = json.loads(consumer_response)['data'][0]
-		print merchant
-		print consumer
 		(response, code, mimetype) = goldark.transactions.get(merchant['id'], consumer['id'], status='pending')
 		if code == 404:
 			return self.render(404, {'error': 'transaction.not_found'})
