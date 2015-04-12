@@ -1,5 +1,6 @@
 import simplify
 import config
+import exceptions
 import creditcard as creditcard
 
 simplify.public_key = config.simplify_access['public_key']
@@ -37,22 +38,28 @@ def charge_with_token( token, currency, amount, description=None):
 
 def charge_with_card_details(card, currency, amount, description=None):
 
-# amount [min value: 50, max value: 9999900]
-# currency [default: USD]
-# description [max length: 1024]
-	amount = unicode(amount)
-	if len(amount) <= 2:
-		amount = '%s0' % amount
+	if (int(amount) < 50 or int(amount) > 9999900 ):
+		raise exceptions.PaymentError('transation amount out of range')
+	if (len(currency) != 3 ):
+		raise exceptions.PaymentError('invalid transation currency')
+	if ( len(description) > 1024):
+		raise exceptions.PaymentError('the description of the transation is too long')
+	if ( currency != 'USD'):
+		raise exceptions.PaymentError('the currency is not USD')
+
 	obj = {
 		"card" : card,
 		"amount" : amount,
 		"description" : description,
 		"currency" : currency
 	}
+
 	if description:
 		obj['description'] = description
+
 	try:
 		payment = simplify.Payment.create( obj )
+
 	except Exception as e:
 		print '---'
 		print amount
@@ -60,7 +67,6 @@ def charge_with_card_details(card, currency, amount, description=None):
 		for _e in e.field_errors:
 			print _e
 		print '---'
-		ieda()
 
 	if payment.paymentStatus == 'APPROVED':
 		print "Payment approved"

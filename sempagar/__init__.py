@@ -25,13 +25,14 @@ routes.append((r'/users/logout', handlers.UserSession))
 routes.append((r'/users/profile', handlers.UserProfile))
 #payments
 routes.append((r'/payments', handlers.Payment))
-routes.append((r'/payments/accept', handlers.PaymentAccept))
+routes.append((r'/payments/accept', handlers.PaymentsAccept))
 #devices
 routes.append((r'/devices', handlers.Devices))
 routes.append((r'/devices/([0-9a-fA-F]{24})', handlers.Device))
 #transactions
 routes.append((r'/transactions', handlers.Transactions))
 routes.append((r'/transactions/([0-9a-fA-F]{24})', handlers.Transaction))
+
 
 application = tornado.web.Application(routes, redis=redis, debug=True)
 

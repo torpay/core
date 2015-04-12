@@ -60,8 +60,8 @@ class Payment(Model):
 		phone_to = phone_to[0]
 		print phone_from
 		print phone_to
-		(merchant_response, merchant_code, merchant_mimetype) = goldark.users.get(phone_from)
-		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(phone_to)
+		(merchant_response, merchant_code, merchant_mimetype) = goldark.users.get(phone_to)
+		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(phone_from)
 		print phone_to
 		if merchant_code != 200:
 			print 'a'
@@ -71,7 +71,9 @@ class Payment(Model):
 			return self.render(404, {'error': 'consumer.not_found'})
 		merchant = json.loads(merchant_response)['data'][0]
 		consumer = json.loads(consumer_response)['data'][0]
-		(response, code, mimetype) = goldark.transactions.get(consumer['id'], merchant['id'], status='pending')
+		print consumer
+		(response, code, mimetype) = goldark.transactions.get(merchant['id'], consumer['id'], status='pending')
+		print response
 		if code == 404:
 			return self.render(404, {'error': 'transaction.not_found'})
 		if answer.lower() != 'sim':
@@ -91,16 +93,16 @@ class Payment(Model):
  		if currency is None:
  			currency = 'USD'
  		description = parsed_response.get('description')
-		payment.simplifyservice.charge_with_card_details(card.to_simplify_obj(), currency, parsed_response['total_value'], description=description)
-		#if not charged:
-		#	return self.render(201, {'status': 'denied'})
+		payment.simplifyservice.charge_with_card_details(card=card.to_simplify_obj(), currency= currency, amount=parsed_response['total_value'], description=description)
+
 		goldark.transactions.update(parsed_response['id'], {'status': 'approved'})
 		parsed_response['status'] = 'approved'
 		goldark.push.send(merchant['id'], json.dumps(parsed_response))
 		try:
 			self.send_valitdation_email(to=consumer['username'], full_name=consumer.get('name'), value=parsed_response['total_value'])
-		except Exception:
-			pass
+		except Exception as e:
+			print 'error while sending validation email'
+
 		msg = 'Pagamento de %s confirmado.' % unicode(parsed_response['total_value'])
 		channel.twilioservice.send_sms(msg, consumer['phone'], merchant['phone'])
 		return self.render(200, {'status': 'success'})

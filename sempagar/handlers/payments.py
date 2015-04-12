@@ -2,7 +2,7 @@
 import tornado.gen
 import tornado.web
 from sempagar.handlers import Handler
-from sempagar.models import payments
+from sempagar.models import payments, users
 import sys
 sys.dont_write_bytecode = True
 
@@ -15,9 +15,9 @@ class Payment(Handler):
 		data = self.model.create(self.data)
 		self.render(data)
 
-class PaymentAccept(Handler):
+class PaymentsAccept(Handler):
 	def prepare(self):
-		super(PaymentAccept, self).prepare()
+		super(PaymentsAccept, self).prepare()
 		self.model = payments.Payment()
 	@tornado.gen.coroutine
 	def post(self):

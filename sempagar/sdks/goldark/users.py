@@ -4,6 +4,7 @@ import config
 import json
 import copy
 import sys
+import urllib
 sys.dont_write_bytecode = True
 
 def signup(data):
@@ -56,3 +57,11 @@ def update_profile(user_id, data):
 		'X-Api-Token': config.api_token
 	}
 	return request(url=url, method='PUT', headers=headers, mimetype='json', data=_data)
+
+def find_by_phone(phone):
+	url = '%s/users?phone=%s' % (config.host, phone)
+	headers = {
+		'X-Api-Token': config.api_token
+	}
+	return request(url=url, method='GET', headers=headers)
+
