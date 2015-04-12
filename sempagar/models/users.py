@@ -7,6 +7,8 @@ sys.dont_write_bytecode = True
 
 class User(Model):
 	def create(self, data):
+		if not 'user_type' in data:
+			data['user_type'] = 'merchant'
 		(response, code, mimetype) = goldark.users.signup(data)
 		return self.render(code, json.loads(response))
 	def update_profile(self, data):

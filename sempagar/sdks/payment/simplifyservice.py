@@ -37,12 +37,15 @@ def charge_with_token( token, currency, amount, description=None):
 	return payment
 
 def charge_with_card_details(card, currency, amount, description=None):
+
 	if (int(amount) < 50 or int(amount) > 9999900 ):
 		raise exceptions.PaymentError('transation amount out of range')
 	if (len(currency) != 3 ):
 		raise exceptions.PaymentError('invalid transation currency')
 	if ( len(description) > 1024):
-		raise exceptions.PaymentError('The description of the transation is too long')
+		raise exceptions.PaymentError('the description of the transation is too long')
+	if ( currency != 'USD'):
+		raise exceptions.PaymentError('the currency is not USD')
 
 	obj = {
 		"card" : card,
@@ -54,7 +57,16 @@ def charge_with_card_details(card, currency, amount, description=None):
 	if description:
 		obj['description'] = description
 
-	payment = simplify.Payment.create( obj )
+	try:
+		payment = simplify.Payment.create( obj )
+
+	except Exception as e:
+		print '---'
+		print amount
+		print e.error_code
+		for _e in e.field_errors:
+			print _e
+		print '---'
 
 	if payment.paymentStatus == 'APPROVED':
 		print "Payment approved"

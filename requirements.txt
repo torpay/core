@@ -1,9 +1,13 @@
 backports.ssl-match-hostname==3.4.0.2
 certifi==14.05.14
+httplib2==0.9.1
 pymongo==3.0
+pytz==2015.2
 redis==2.10.3
+simplifycommerce-sdk-python==1.2.0
+six==1.9.0
 tornado==4.1
+twilio==3.8.0
 wsgiref==0.1.2
 twilio==3.8.0
-simplifycommerce-sdk-python==1.2.0
 urllib3==1.7.1
