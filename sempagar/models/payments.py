@@ -81,7 +81,7 @@ class Payment(Model):
 			return self.render(403, {'error': 'permission denied'})
 		parsed_response = json.loads(response)
 		parsed_response = parsed_response['data'][0]
-		(card_response, card_code, card_mimetype) = goldark.cards.get(merchant['id'])
+		(card_response, card_code, card_mimetype) = goldark.cards.get(consumer['id'])
 		if card_code == 404:
 			return self.render(404, {'error': 'card.not_found'})
 		parsed_card_response = json.loads(card_response)
