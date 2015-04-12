@@ -76,7 +76,10 @@ class Payment(Model):
 		consumer = json.loads(consumer_response)['data'][0]
 		(response, code, mimetype) = goldark.transactions.get(merchant['id'], consumer['id'], status='pending')
 		if code == 404:
-			print 'c'
+			print '---'
+			print merchant['id']
+			print consumer['id']
+			print '---'
 			return self.render(404, {'error': 'transaction.not_found'})
 		if answer.lower() != 'sim':
 			goldark.transactions.update(response['id'], {'status': 'error', 'status_message': 'denied'})
