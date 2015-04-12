@@ -50,7 +50,7 @@ class Payment(Model):
 			},
 			'transaction': json.loads(response)
 		}
-		return self.render(201, {'msg': msg, 'to': user['phone']})
+		return self.render(201, output)
 	def accept_payment(self, data):
 		data = urlparse.parse_qs(data)
 		answer = data.get('Body')
