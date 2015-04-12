@@ -33,6 +33,12 @@ class Payment(Model):
 		})
 		if code != 201:
 			return self.render(code, json.loads(response))
+		if not data['phone'].startswith('+') and not '+55' in data['phone']:
+			data['phone'] = '+55%s' % data['phone']
+		if not user['phone'].startswith('+') and not '+55' in user['phone']:
+			user['phone'] = '+55%s' % user['phone']
+		print data['phone']
+		print user['phone']
 		channel.twilioservice.send_sms(msg, data['phone'], user['phone'])
 		output = {
 			'channel': {
@@ -41,7 +47,7 @@ class Payment(Model):
 			},
 			'transaction': json.loads(response)
 		}
-		return self.render(201, {'msg': msg, 'to': user['phone']})
+		return self.render(201, output)
 	def accept_payment(self, data):
 		data = urlparse.parse_qs(data)
 		answer = data.get('Body')
@@ -52,12 +58,16 @@ class Payment(Model):
 		answer = answer[0]
 		phone_from = phone_from[0]
 		phone_to = phone_to[0]
-		(merchant_response, merchant_code, merchant_mimetype) = goldark.users.get(phone_from)
-		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(phone_to)
+		print phone_from
+		print phone_to
+		(merchant_response, merchant_code, merchant_mimetype) = goldark.users.get(phone_to)
+		(consumer_response, consumer_code, consumer_mimetype) = goldark.users.get(phone_from)
 		print phone_to
 		if merchant_code != 200:
+			print 'a'
 			return self.render(404, {'error': 'merchant.not_found'})
 		if consumer_code != 200:
+			print 'b'
 			return self.render(404, {'error': 'consumer.not_found'})
 		merchant = json.loads(merchant_response)['data'][0]
 		consumer = json.loads(consumer_response)['data'][0]
@@ -71,7 +81,7 @@ class Payment(Model):
 			return self.render(403, {'error': 'permission denied'})
 		parsed_response = json.loads(response)
 		parsed_response = parsed_response['data'][0]
-		(card_response, card_code, card_mimetype) = goldark.cards.get(consumer['id'])
+		(card_response, card_code, card_mimetype) = goldark.cards.get(merchant['id'])
 		if card_code == 404:
 			return self.render(404, {'error': 'card.not_found'})
 		parsed_card_response = json.loads(card_response)
