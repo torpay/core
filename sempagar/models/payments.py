@@ -100,7 +100,7 @@ class Payment(Model):
 		user = self.get_user()
 		if user is None:
 			return self.render(401, {'error': 'unauthorized'})
-		(response, code, mimetype) = goldark.transactions.search(user['_id'])
+		(response, code, mimetype) = goldark.transactions.search(user['id'])
 		return self.render(code, json.loads(response))
 	def get_one(self, payment_id):
 		user = self.get_user()
