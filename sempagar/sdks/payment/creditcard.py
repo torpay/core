@@ -1,11 +1,22 @@
+import exceptions
+
 class CreditCard(object):
 
 	def __init__(self, number, exp_month, exp_year, cvc, name=None, addressCity=None, addressCountry=None, addressLine1=None, addressLine2=None, addressState=None, addressZip=None):
-		self.number = number # [min length: 13, max length: 19]
+		if (len(number) < 13 or len(number) > 19 ):
+			raise exceptions.CreditCardError('Invalid CreditCard number')
+		self.number = number
+		if ( exp_year > 99):
+			raise exceptions.CreditCardError('Invalid CreditCard Year ')
 		self.exp_year = exp_year # [max value: 99]
+		if ( exp_month > 99):
+			raise exceptions.CreditCardError('Invalid CreditCard Month ')
 		self.exp_month = exp_month # [min value: 1, max value: 12]
 		self.cvc = cvc
+		if ( name and ( len(name) < 2 or len(name) > 50 ) ):
+			raise exceptions.CreditCardError('CreditCard Holder Name is too long ')
 		self.name = name #[min length: 2, max length: 50]
+
 		self.addressState = addressState
 		self.addressCity = addressCity
 		self.addressCountry = addressCountry
