@@ -102,7 +102,7 @@ class Payment(Model):
 		except Exception:
 			pass
 		msg = 'Pagamento de %s confirmado.' % unicode(parsed_response['total_value'])
-		channel.twilioservice.send_sms(msg, consumer['phone'], merchant['phone'])
+		channel.twilioservice.send_sms(msg, merchant['phone'], consumer['phone'])
 		return self.render(200, {'status': 'success'})
 	def search(self):
 		user = self.get_user()
