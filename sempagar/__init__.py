@@ -14,7 +14,7 @@ sys.dont_write_bytecode = True
 
 define('port', default=5000, help='run on the given port', type=int)
 
-redis = redis.StrictRedis(host='cobia.redistogo.com', port='9608', password='742b9896c3849731f37ad20b60a49310', db='redistogo')
+redis = redis.StrictRedis(host='cobia.redistogo.com', port='9608', password='742b9896c3849731f37ad20b60a49310')
 #redis = redis.StrictRedis()
 
 routes = []
