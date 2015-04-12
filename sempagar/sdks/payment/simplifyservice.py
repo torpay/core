@@ -2,8 +2,8 @@ import simplify
 import config
 import creditcard as creditcard
 
-simplify.public_key = settings.simplify_access['public_key']
-simplify.private_key = settings.simplify_access['private_key']
+simplify.public_key = config.simplify_access['public_key']
+simplify.private_key = config.simplify_access['private_key']
 
 def tokenify(card):
 	obj = {
@@ -40,7 +40,9 @@ def charge_with_card_details(card, currency, amount, description=None):
 # amount [min value: 50, max value: 9999900]
 # currency [default: USD]
 # description [max length: 1024]
-
+	amount = unicode(amount)
+	if len(amount) <= 2:
+		amount = '%s0' % amount
 	obj = {
 		"card" : card,
 		"amount" : amount,
@@ -49,8 +51,16 @@ def charge_with_card_details(card, currency, amount, description=None):
 	}
 	if description:
 		obj['description'] = description
-
-	payment = simplify.Payment.create( obj )
+	try:
+		payment = simplify.Payment.create( obj )
+	except Exception as e:
+		print '---'
+		print amount
+		print e.error_code
+		for _e in e.field_errors:
+			print _e
+		print '---'
+		ieda()
 
 	if payment.paymentStatus == 'APPROVED':
 		print "Payment approved"

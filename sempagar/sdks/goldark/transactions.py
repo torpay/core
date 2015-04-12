@@ -6,53 +6,54 @@ import copy
 import sys
 sys.dont_write_bytecode = True
 
-def signup(data):
+def create(data):
 	_data = copy.copy(data)
 	if type(_data) != dict:
 		_data = json.loads(data)
-	url = '%s/users' % (config.host)
-	headers = {
-		'X-Api-Token': config.api_token
-	}
-	return request(url=url, method='POST', headers=headers, mimetype='json', data=_data)
-def login(data):
-	_data = copy.copy(data)
-	if type(_data) != dict:
-		_data = json.loads(data)
-	url = '%s/sessions' % (config.host)
+	url = '%s/invoices' % (config.host)
 	headers = {
 		'X-Api-Token': config.api_token
 	}
 	return request(url=url, method='POST', headers=headers, mimetype='json', data=_data)
 
-def logout(access_token):
-	url = '%s/sessions' % (config.host)
-	headers = {
-		'X-Access-Token': access_token,
-		'X-Api-Token': config.api_token
-	}
-	return request(url=url, method='DELETE', headers=headers)
-
-def get(phone_number):
-	url = '%s/users?phone=%s' % (config.host, phone_number.replace('+', '%2B'))
+def get(merchant_id, consumer_id, **kwargs):
+	status = kwargs.get('status')
+	if status is None:
+		status = 'pending'
+	url = '%s/invoices?merchant=%s&consumer=%s&status=%s' % (config.host, merchant_id, consumer_id, status)
+	print url
 	headers = {
 		'X-Api-Token': config.api_token
 	}
 	return request(url=url, method='GET', headers=headers)
 
-def get_profile(user_id):
-	url = '%s/users/%s' % (config.host, user_id)
+def get_one(payment_id):
+	status = kwargs.get('status')
+	if status is None:
+		status = 'pending'
+	url = '%s/invoices/%s' % (config.host, payment_id)
 	headers = {
 		'X-Api-Token': config.api_token
 	}
 	return request(url=url, method='GET', headers=headers)
 
-def update_profile(user_id, data):
+def update(payment_id, data):
+	url = '%s/invoices/%s' % (config.host, payment_id)
 	_data = copy.copy(data)
 	if type(_data) != dict:
 		_data = json.loads(data)
-	url = '%s/users/%s' % (config.host, user_id)
 	headers = {
 		'X-Api-Token': config.api_token
 	}
 	return request(url=url, method='PUT', headers=headers, mimetype='json', data=_data)
+
+def search(user_id):
+	status = kwargs.get('status')
+	if status is None:
+		status = 'pending'
+	url = '%s/invoices?merchant=%s' % (config.host, user_id)
+	headers = {
+		'X-Api-Token': config.api_token
+	}
+	return request(url=url, method='GET', headers=headers)
+

@@ -47,16 +47,16 @@ class Handler(tornado.web.RequestHandler):
         return self.api_token == redis_token
     def render_as_unauthorized(self):
         self.set_header('Content-Type', 'application/json;charset=utf-8')
-        self.set_status(HTTPCode.UNAUTHORIZED)
+        self.set_status(401)
         self.finish(json.dumps({'error': 'unauthorized'}))
     def render_as_not_allowed(self):
         self.set_header('Content-Type', 'application/json;charset=utf-8')
-        self.set_status(HTTPCode.NOT_ALLOWED)
-        self.finish(ujson.dumps({'error': 'http method/verb not allowed'}))
+        self.set_status(403)
+        self.finish(json.dumps({'error': 'http method/verb not allowed'}))
     def render_as_internal_error(self):
         self.set_header('Content-Type', 'application/json;charset=utf-8')
-        self.set_status(HTTPCode.INTERNAL_ERROR)
-        self.finish(ujson.dumps({'error': 'internal error'}))
+        self.set_status(500)
+        self.finish(json.dumps({'error': 'internal error'}))
     @tornado.gen.coroutine
     def post(self, *args, **kwargs):
         self.render_as_not_allowed()
@@ -86,3 +86,6 @@ class Handler(tornado.web.RequestHandler):
         self.render_as_internal_error()
 
 from users import *
+from payments import *
+from devices import *
+from transactions import *
