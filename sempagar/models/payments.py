@@ -103,7 +103,7 @@ class Payment(Model):
 		except Exception as e:
 			print 'error while sending validation email'
 
-		msg = 'Pagamento de %s confirmado.' % unicode(parsed_response['total_value'])
+		msg = 'Pagamento de R$%s confirmado.' % unicode(int(parsed_response['total_value'])/100) 
 		channel.twilioservice.send_sms(msg, consumer['phone'], merchant['phone'])
 		return self.render(200, {'status': 'success'})
 	def search(self):
