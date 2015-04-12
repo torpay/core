@@ -10,7 +10,7 @@ class User(Model):
 		if 'username' in data:
 			if not '+55' in data['username']:
 				data['username'] = '+55%s' % data['username']
-			data['phone'] = dara['username']
+			data['phone'] = data['username']
 		if not 'user_type' in data:
 			data['user_type'] = 'merchant'
 		(response, code, mimetype) = goldark.users.signup(data)
