@@ -37,6 +37,8 @@ class Payment(Model):
 			data['phone'] = '+55%s' % data['phone']
 		if not user['phone'].startswith('+') and not '+55' in user['phone']:
 			user['phone'] = '+55%s' % user['phone']
+		print data['phone']
+		print user['phone']
 		channel.twilioservice.send_sms(msg, data['phone'], user['phone'])
 		output = {
 			'channel': {
