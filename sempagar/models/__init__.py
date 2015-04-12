@@ -25,7 +25,7 @@ class Model(object):
 		full_name = kwargs.get('full_name')
 		token = kwargs.get('token')
 		value = kwargs.get('value')
-		fromaddr = 'sempagar.no-reply@gmail.com'
+		fromaddr = 'sempagar.noreply@gmail.com'
 		toaddrs  = toaddr
 		body_parts = []
 		body_parts.append('Hello %s' % full_name)
