@@ -22,6 +22,7 @@ routes.append((r'/users', handlers.Users))
 routes.append((r'/users/login', handlers.UserSession))
 routes.append((r'/users/logout', handlers.UserSession))
 routes.append((r'/users/profile', handlers.UserProfile))
+routes.append((r'/payments/accept', handlers.PaymentsAccept))
 
 application = tornado.web.Application(routes, redis=redis, debug=True)
 

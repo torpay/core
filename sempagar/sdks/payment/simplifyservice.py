@@ -2,8 +2,8 @@ import simplify
 import config
 import creditcard as creditcard
 
-simplify.public_key = settings.simplify_access['public_key']
-simplify.private_key = settings.simplify_access['private_key']
+simplify.public_key = config.simplify_access['public_key']
+simplify.private_key = config.simplify_access['private_key']
 
 def tokenify(card):
 	obj = {

@@ -5,6 +5,7 @@ import tornado.gen
 import json
 import datetime
 import sys
+
 sys.dont_write_bytecode = True
 
 class Handler(tornado.web.RequestHandler):
@@ -86,3 +87,4 @@ class Handler(tornado.web.RequestHandler):
         self.render_as_internal_error()
 
 from users import *
+from payments import *
